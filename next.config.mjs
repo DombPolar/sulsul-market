@@ -1,26 +1,18 @@
-import withFonts from 'next-fonts';
-
 /** @type {import('next').NextConfig} */
-const nextConfig = withFonts({
-  webpack(config) {
-    return config;
-  },
+const nextConfig = {
   experimental: {
     taint: true,
   },
   images: {
     remotePatterns: [
       {
-        hostname: 'avatars.githubusercontent.com',
+        hostname: "avatars.githubusercontent.com",
       },
       {
-        hostname: 'imagedelivery.net',
-      },
-      {
-        hostname: 't1.kakaocdn.net',
+        hostname: "imagedelivery.net",
       },
     ],
   },
-});
+};
 
 export default nextConfig;
