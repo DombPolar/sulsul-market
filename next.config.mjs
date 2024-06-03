@@ -1,13 +1,10 @@
-/** @type {import('next').NextConfig} */
-const { withFonts } = require('next-fonts');
+import withFonts from 'next-fonts';
 
-module.exports = withFonts({
+/** @type {import('next').NextConfig} */
+const nextConfig = withFonts({
   webpack(config) {
     return config;
   },
-});
-
-const nextConfig = {
   experimental: {
     taint: true,
   },
@@ -24,6 +21,6 @@ const nextConfig = {
       },
     ],
   },
-};
+});
 
 export default nextConfig;
