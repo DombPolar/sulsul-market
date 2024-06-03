@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  username     String       @unique
+  email        String?      @unique
+  phone        String?      @unique
+  github_id    String?      @unique
+  kakao_id    String?      @unique
+  google_id    String?      @unique
+  naver_id    String?      @unique
+  password     String?
+  avatar       String?
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  sms_tokens   SMSToken[]
+  products     Product[]
+  posts        Post[]
+  comments     Comment[]
+  likes        Like[]
+  chat_rooms   ChatRoom[]
+  message      Message[]
+  live_streams LiveStream[]
+  reviews    Review[]
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  title       String
+  price       Float
+  description String
+  photo       String
+
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  isSold     Boolean    @default(false)
+  chatRooms  ChatRoom[]
+}
+
+model SMSToken {
+  id         Int      @id @default(autoincrement())
+  phone      String?  @unique
+  token      String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+}
+model Post {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  views       Int     @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  comments Comment[]
+  likes    Like[]
+}
+
+model Like {
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
+
+  @@id(name: "id", [userId, postId])
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  payload String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
+}
+model ChatRoom {
+  id       String    @id @default(cuid())
+  users    User[]
+  messages Message[]
+  product  Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  productId Int
+}
+
+model Message {
+  id      Int    @id @default(autoincrement())
+  payload String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  room       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  userId     Int
+  isRead     Boolean  @default(false)
+}
+
+
+model LiveStream {
+  id         Int    @id @default(autoincrement())
+  title      String
+  stream_id  String
+  stream_key String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user    User @relation(fields: [user_id], references: [id])
+  user_id Int
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  payload String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
