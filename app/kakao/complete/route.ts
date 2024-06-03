@@ -55,7 +55,9 @@ export async function GET(request: NextRequest) {
   if (user) {
     const session = await getSession();
     session.id = user.id;
-    await session.save();
+    if ('save' in session) { // session 객체에 save 메서드가 있는지 확인
+      await session.save();
+    }
     return redirect("/profile");
   }
 
@@ -74,7 +76,9 @@ export async function GET(request: NextRequest) {
   if (newUser) {
     const session = await getSession();
     session.id = newUser.id;
-    await session.save();
+    if ('save' in session) { // session 객체에 save 메서드가 있는지 확인
+      await session.save();
+    }
     return redirect("/profile");
   }
 }
