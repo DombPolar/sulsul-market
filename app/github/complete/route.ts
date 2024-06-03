@@ -50,11 +50,8 @@ export async function GET(request: NextRequest) {
   });
 
   if (user) {
-    const session = await getSession() as any;
+    const session = await getSession();
     session.id = user.id;
-    if (typeof session.save === 'function') {
-      await session.save();
-    }
     return redirect("/profile");
   }
 
@@ -71,11 +68,8 @@ export async function GET(request: NextRequest) {
   });
 
   if (newUser) {
-    const session = await getSession() as any;
+    const session = await getSession();
     session.id = newUser.id;
-    if (typeof session.save === 'function') {
-      await session.save();
-    }
     return redirect("/profile");
   }
 }
