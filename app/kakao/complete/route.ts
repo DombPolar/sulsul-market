@@ -31,10 +31,11 @@ export async function GET(request: NextRequest) {
     body: accessTokenParams
   });
 
-  const { error, access_token } = await accessTokenResponse.json();
+  const accessTokenData = await accessTokenResponse.json();
+  const { error, access_token } = accessTokenData;
 
   if (error) {
-    console.log("Error fetching access token:", error);
+    console.log("Error fetching access token:", error, accessTokenData);
     return new Response(null, { status: 400 });
   }
 
@@ -47,46 +48,44 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  const { id, properties: { nickname } } = await userProfileResponse.json();
+  const userProfileData = await userProfileResponse.json();
+  const id = userProfileData.id;
+  const nickname = userProfileData.properties.nickname;
 
   console.log("User profile fetched:", id, nickname);
 
-  const user = await db.user.findUnique({
+  // 사용자 확인 또는 생성
+  let user = await db.user.findUnique({
     where: {
       kakao_id: id.toString(),
     },
-    select: {
-      id: true,
-    },
   });
 
-  if (user) {
+  if (!user) {
+    user = await db.user.create({
+      data: {
+        username: nickname,
+        kakao_id: id.toString(),
+        avatar: "https://avatars.githubusercontent.com/u/169572985?v=4",
+        email: `${nickname}@kakao.com`,
+      },
+    });
+    console.log("New user created:", user);
+  } else {
     console.log("Existing user found:", user);
-    const session = await getSession();
-    session.id = user.id;
-    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
-    return redirect("/profile");
   }
 
-  const newUser = await db.user.create({
-    data: {
-      username: nickname,
-      kakao_id: id.toString(),
-      avatar: "https://avatars.githubusercontent.com/u/169572985?v=4",
-      email: `${nickname}@kakao.com`,
-    },
-    select: {
-      id: true,
-    },
-  });
+  // 세션 설정
+  const session = await getSession();
 
-  if (newUser) {
-    console.log("New user created:", newUser);
-    const session = await getSession();
-    session.id = newUser.id;
-    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
-    return redirect("/profile");
+  if (!session) {
+    console.log("Failed to retrieve session");
+    return new Response(null, { status: 500 });
   }
 
-  console.log("User creation failed, or session not set correctly");
+  session.id = user.id;
+  console.log("Session set for user:", session);
+
+  // 세션 설정 후 리디렉션
+  return redirect("/profile");
 }
