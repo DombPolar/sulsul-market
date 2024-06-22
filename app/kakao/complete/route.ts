@@ -54,7 +54,6 @@ export async function GET(request: NextRequest) {
 
   console.log("User profile fetched:", id, nickname);
 
-  // 사용자 확인 또는 생성
   let user = await db.user.findUnique({
     where: {
       kakao_id: id.toString(),
@@ -75,7 +74,6 @@ export async function GET(request: NextRequest) {
     console.log("Existing user found:", user);
   }
 
-  // 세션 설정
   const session = await getSession();
 
   if (!session) {
@@ -86,6 +84,6 @@ export async function GET(request: NextRequest) {
   session.id = user.id;
   console.log("Session set for user:", session);
 
-  // 세션 설정 후 리디렉션
+  // 세션 변경을 클라이언트에게 반영하기 위해 await 필요 없음
   return redirect("/profile");
 }
