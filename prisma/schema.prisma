@@ -8,10 +8,10 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-//로컬 DB 쓰고 싶을 때 사용
+// 로컬 DB 사용 설정
 //datasource db {
   //provider = "sqlite"
-  //url      = env("DATABASE_URL")asdasd
+  //url      = env("DATABASE_URL")
 //}
 
 model User {
@@ -20,9 +20,9 @@ model User {
   email        String?      @unique
   phone        String?      @unique
   github_id    String?      @unique
-  kakao_id    String?      @unique
+  kakao_id     String?      @unique
   google_id    String?      @unique
-  naver_id    String?      @unique
+  naver_id     String?      @unique
   password     String?
   avatar       String?
   created_at   DateTime     @default(now())
@@ -35,8 +35,18 @@ model User {
   chat_rooms   ChatRoom[]
   message      Message[]
   live_streams LiveStream[]
-  reviews    Review[]
+  reviews      Review[]
+  orders       Order[]
 }
+
+model Drink {
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  price       Float
+  productCode String   @unique
+  orders      Order[]
+}
+
 
 model Product {
   id          Int    @id @default(autoincrement())
@@ -62,6 +72,7 @@ model SMSToken {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
 }
+
 model Post {
   id          Int     @id @default(autoincrement())
   title       String
@@ -101,6 +112,7 @@ model Comment {
   userId Int
   postId Int
 }
+
 model ChatRoom {
   id       String    @id @default(cuid())
   users    User[]
@@ -127,7 +139,6 @@ model Message {
   isRead     Boolean  @default(false)
 }
 
-
 model LiveStream {
   id         Int    @id @default(autoincrement())
   title      String
@@ -152,3 +163,18 @@ model Review {
   userId Int
 }
 
+model Order {
+  id            Int      @id @default(autoincrement())
+  orderDate     DateTime
+  deliveryDate  DateTime
+  quantity      Int
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+
+  drink         Drink    @relation(fields: [drinkId], references: [id])
+  drinkId       Int
+
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}

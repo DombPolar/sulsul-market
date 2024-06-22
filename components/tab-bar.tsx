@@ -35,7 +35,7 @@ const TabBar = () => {
         ) : (
           <OutlineNewspaperIcon className="size-7" />
         )}
-        <span>공지사항</span>
+        <span>공지</span>
       </Link>
       <Link href="/chat" className="flex flex-col items-center gap-px">
         {pathname === "/chat" ? (
@@ -43,7 +43,7 @@ const TabBar = () => {
         ) : (
           <OutlineChatIcon className="size-7" />
         )}
-        <span>주문내역</span>
+        <span>채팅</span>
       </Link>
       <Link href="/live" className="flex flex-col items-center gap-px">
         {pathname === "/live" ? (
@@ -51,7 +51,7 @@ const TabBar = () => {
         ) : (
           <OutlineVideoCameraIcon className="size-7" />
         )}
-        <span>라이브</span>
+        <span>발주</span>
       </Link>
       <Link href="/profile" className="flex flex-col items-center gap-px">
         {pathname === "/profile" ? (

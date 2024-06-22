@@ -35,7 +35,7 @@ const ProductsPage = async () => {
   const initialProducts = await getInitialProducts();
   return (
     <>
-      <h1 className="text-white text-4xl">Products</h1>
+      <h1 className="text-4xl mb-3">반품 & 건의</h1>
       <div>
         <ProductList initialProduct={initialProducts} />
       </div>

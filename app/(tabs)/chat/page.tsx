@@ -57,7 +57,7 @@ const ChatPage = async () => {
 
   return (
     <div>
-      <h1 className="text-white text-4xl">주문 & 상담</h1>
+      <h1 className="text-4xl mb-3">채팅방</h1>
       {chats.map((chat, idx) => (
         <ListChat
           id={chat.id}

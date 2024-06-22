@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-neutral-900 text-white max-w-md mx-auto">
         {children}
+        <Script src="https://cdn.iamport.kr/v1/iamport.js" />
       </body>
     </html>
   );

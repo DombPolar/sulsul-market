@@ -95,7 +95,7 @@ const Modal = async ({ params }: { params: { id: string } }) => {
               ) : (
                 <form action={createChatRoom}>
                   <button className="bg-blue-500 px-2.5 py-1.5 rounded-md text-white font-semibold">
-                    주문하기
+                    채팅하기
                   </button>
                 </form>
               )}

@@ -133,7 +133,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
         <h1 className="text-3xl">{user.username}님의 프로필</h1>
       </div>
       <div className="flex flex-col gap-3">
-        <h2 className="text-xl">판매한 상품</h2>
+        <h2 className="text-xl">건의 목록</h2>
         <ul className="flex overflow-x-auto gap-5 pb-3">
           {user.products.map((product) => (
             <Link
@@ -158,7 +158,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
         </ul>
       </div>
       <div className="flex flex-col gap-3">
-        <h2 className="text-xl">구매한 상품</h2>
+        <h2 className="text-xl">건의 완료</h2>
         <ul className="flex overflow-x-auto gap-5 pb-3">
           {boughtProducts.map((product) => (
             <div

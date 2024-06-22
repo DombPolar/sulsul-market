@@ -3,6 +3,7 @@ import { formatToTimeAgo } from "@/lib/utils";
 import {
   ChatBubbleBottomCenterIcon,
   HandThumbUpIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { unstable_cache as nextCache } from "next/cache";
@@ -29,7 +30,7 @@ const getPosts = async () => {
 const getCachedPosts = nextCache(getPosts, ["posts"], { tags: ["posts"] });
 
 export const metadata = {
-  title: "동네생활",
+  title: "공지사항",
 };
 
 const LifePage = async () => {
@@ -64,6 +65,12 @@ const LifePage = async () => {
           </div>
         </Link>
       ))}
+      <Link
+        href="./life/add"
+        className="bg-orange-500 flex items-center justify-center rounded-full size-16 fixed bottom-24 left-0 right-0 mx-auto translate-x-36 sm:translate-x-44 text-white transition-colors hover:bg-orange-400"
+      >
+        <PlusIcon className="size-10" />
+      </Link>
     </div>
   );
 };

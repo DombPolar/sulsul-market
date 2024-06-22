@@ -14,8 +14,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const SUPABASE_PUBLIC_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6Z3dweGF1aWJ3anh3emhuZmJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY0NDU1NjMsImV4cCI6MjAzMjAyMTU2M30.svLKR1Z8xbA8Ph1P-mlABZFMH4Z1zjY9D_QkGJ_aZy8";
-const SUPABASE_URL = "https://hzgwpxauibwjxwzhnfbv.supabase.co";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5anBhY3NnaGtkdnV0bXB4bHVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc4NDQ0ODgsImV4cCI6MjAzMzQyMDQ4OH0.xau4AITHpWb13Pkzaei1cf9SJhZNEw_NQypT-d4eUeI";
+const SUPABASE_URL = "https://wyjpacsghkdvutmpxluj.supabase.co";
 
 interface IChatMessagesListProps {
   initialMessages: InitialChatMessages;
@@ -128,7 +128,7 @@ const ChatMessagesList = ({
         ) : (
           <form action={onSold}>
             <button className="py-2 px-3 bg-orange-500 rounded-md cursor-pointer">
-              판매 완료
+              완료
             </button>
           </form>
         )}
