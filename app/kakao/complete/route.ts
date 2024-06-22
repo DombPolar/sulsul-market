@@ -7,11 +7,8 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
 
   if (!code) {
-    console.log("Authorization code not found");
     return notFound();
   }
-
-  console.log("Authorization code found:", code);
 
   const accessTokenParams = new URLSearchParams({
     grant_type: "authorization_code",
@@ -31,15 +28,11 @@ export async function GET(request: NextRequest) {
     body: accessTokenParams
   });
 
-  const accessTokenData = await accessTokenResponse.json();
-  const { error, access_token } = accessTokenData;
+  const { error, access_token } = await accessTokenResponse.json();
 
   if (error) {
-    console.log("Error fetching access token:", error, accessTokenData);
     return new Response(null, { status: 400 });
   }
-
-  console.log("Access token obtained:", access_token);
 
   const userProfileResponse = await fetch("https://kapi.kakao.com/v2/user/me", {
     headers: {
@@ -48,42 +41,40 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  const userProfileData = await userProfileResponse.json();
-  const id = userProfileData.id;
-  const nickname = userProfileData.properties.nickname;
+  const { id, properties: { nickname } } = await userProfileResponse.json();
 
-  console.log("User profile fetched:", id, nickname);
-
-  let user = await db.user.findUnique({
+  const user = await db.user.findUnique({
     where: {
       kakao_id: id.toString(),
     },
+    select: {
+      id: true,
+    },
   });
 
-  if (!user) {
-    user = await db.user.create({
-      data: {
-        username: nickname,
-        kakao_id: id.toString(),
-        avatar: "https://avatars.githubusercontent.com/u/169572985?v=4",
-        email: `${nickname}@kakao.com`,
-      },
-    });
-    console.log("New user created:", user);
-  } else {
-    console.log("Existing user found:", user);
+  if (user) {
+    const session = await getSession();
+    session.id = user.id;
+    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
+    return redirect("/profile");
   }
 
-  const session = await getSession();
+  const newUser = await db.user.create({
+    data: {
+      username: nickname,
+      kakao_id: id.toString(),
+      avatar: "https://avatars.githubusercontent.com/u/169572985?v=4", 
+      email: `${nickname}@kakao.com`,
+    },
+    select: {
+      id: true,
+    },
+  });
 
-  if (!session) {
-    console.log("Failed to retrieve session");
-    return new Response(null, { status: 500 });
+  if (newUser) {
+    const session = await getSession();
+    session.id = newUser.id;
+    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
+    return redirect("/profile");
   }
-
-  session.id = user.id;
-  console.log("Session set for user:", session);
-
-  // 세션 변경을 클라이언트에게 반영하기 위해 await 필요 없음
-  return redirect("/profile");
 }
