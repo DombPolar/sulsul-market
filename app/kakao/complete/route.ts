@@ -7,8 +7,11 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
 
   if (!code) {
+    console.log("Authorization code not found");
     return notFound();
   }
+
+  console.log("Authorization code found:", code);
 
   const accessTokenParams = new URLSearchParams({
     grant_type: "authorization_code",
@@ -31,8 +34,11 @@ export async function GET(request: NextRequest) {
   const { error, access_token } = await accessTokenResponse.json();
 
   if (error) {
+    console.log("Error fetching access token:", error);
     return new Response(null, { status: 400 });
   }
+
+  console.log("Access token obtained:", access_token);
 
   const userProfileResponse = await fetch("https://kapi.kakao.com/v2/user/me", {
     headers: {
@@ -42,6 +48,8 @@ export async function GET(request: NextRequest) {
   });
 
   const { id, properties: { nickname } } = await userProfileResponse.json();
+
+  console.log("User profile fetched:", id, nickname);
 
   const user = await db.user.findUnique({
     where: {
@@ -53,6 +61,7 @@ export async function GET(request: NextRequest) {
   });
 
   if (user) {
+    console.log("Existing user found:", user);
     const session = await getSession();
     session.id = user.id;
     // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
@@ -63,7 +72,7 @@ export async function GET(request: NextRequest) {
     data: {
       username: nickname,
       kakao_id: id.toString(),
-      avatar: "https://avatars.githubusercontent.com/u/169572985?v=4", 
+      avatar: "https://avatars.githubusercontent.com/u/169572985?v=4",
       email: `${nickname}@kakao.com`,
     },
     select: {
@@ -72,9 +81,12 @@ export async function GET(request: NextRequest) {
   });
 
   if (newUser) {
+    console.log("New user created:", newUser);
     const session = await getSession();
     session.id = newUser.id;
     // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
     return redirect("/profile");
   }
+
+  console.log("User creation failed, or session not set correctly");
 }
