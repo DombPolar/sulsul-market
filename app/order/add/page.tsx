@@ -104,7 +104,9 @@ const AddOrder = () => {
               className="ml-2 h-6 w-6 cursor-pointer bg-gray-200 rounded-full"
               onClick={() => handleNavigateToDrink(index)}
             />
-            {errors.items?.[index]?.title && <p>{errors.items[index].title?.message}</p>}
+            {errors.items && errors.items[index] && errors.items[index].title && (
+              <p>{errors.items[index].title?.message}</p>
+            )}
 
             <input
               placeholder="가격"
@@ -116,7 +118,9 @@ const AddOrder = () => {
               defaultValue={item.price}
               className="border p-2 w-1/3 bg-white text-black"
             />
-            {errors.items?.[index]?.price && <p>{errors.items[index].price?.message}</p>}
+            {errors.items && errors.items[index] && errors.items[index].price && (
+              <p>{errors.items[index].price?.message}</p>
+            )}
 
             <input
               placeholder="수량"
@@ -127,7 +131,9 @@ const AddOrder = () => {
               defaultValue={item.quantity}
               className="border p-2 w-1/3 bg-white text-black"
             />
-            {errors.items?.[index]?.quantity && <p>{errors.items[index].quantity?.message}</p>}
+            {errors.items && errors.items[index] && errors.items[index].quantity && (
+              <p>{errors.items[index].quantity?.message}</p>
+            )}
 
             <TrashIcon
               className="ml-2 h-6 w-6 cursor-pointer bg-red-200 rounded-full"
