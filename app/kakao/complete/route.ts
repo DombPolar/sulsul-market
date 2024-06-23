@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import getSession from "@/lib/session";
+import { LogIn } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -23,29 +23,31 @@ export async function GET(request: NextRequest) {
   const accessTokenResponse = await fetch(accessTokenUrl, {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     },
-    body: accessTokenParams
+    body: accessTokenParams,
   });
 
-  const { error, access_token } = await accessTokenResponse.json();
+  const accessTokenData = await accessTokenResponse.json();
 
-  if (error) {
+  if (accessTokenData.error) {
     return new Response(null, { status: 400 });
   }
 
   const userProfileResponse = await fetch("https://kapi.kakao.com/v2/user/me", {
     headers: {
-      Authorization: `Bearer ${access_token}`,
+      Authorization: `Bearer ${accessTokenData.access_token}`,
       cache: "no-cache",
     },
   });
 
-  const { id, properties: { nickname } } = await userProfileResponse.json();
+  const userProfileData = await userProfileResponse.json();
 
-  const user = await db.user.findUnique({
+  const { id, properties: { nickname, profile_image } } = userProfileData;
+
+  const user = await db.user.findFirst({
     where: {
-      kakao_id: id.toString(),
+      OR: [{ email: `${nickname}@kakao.com` }, { kakao_id: id.toString() }],
     },
     select: {
       id: true,
@@ -53,28 +55,33 @@ export async function GET(request: NextRequest) {
   });
 
   if (user) {
-    const session = await getSession();
-    session.id = user.id;
-    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
-    return redirect("/profile");
+    await LogIn(user.id);
+  } else {
+    const dbUser = await db.user.findUnique({
+      where: {
+        username: nickname,
+      },
+      select: {
+        id: true,
+      },
+    });
+    let username = nickname;
+    if (dbUser) {
+      username += id;
+    }
+    const newUser = await db.user.create({
+      data: {
+        username,
+        email: `${nickname}@kakao.com`,
+        kakao_id: id.toString(),
+        avatar: profile_image ?? "https://avatars.githubusercontent.com/u/169572985?v=4",
+      },
+      select: {
+        id: true,
+      },
+    });
+    await LogIn(newUser.id);
   }
 
-  const newUser = await db.user.create({
-    data: {
-      username: nickname,
-      kakao_id: id.toString(),
-      avatar: "https://avatars.githubusercontent.com/u/169572985?v=4", 
-      email: `${nickname}@kakao.com`,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  if (newUser) {
-    const session = await getSession();
-    session.id = newUser.id;
-    // 세션을 변경한 후 별도의 저장 메서드를 호출할 필요 없음
-    return redirect("/profile");
-  }
+  return redirect("/profile");
 }
