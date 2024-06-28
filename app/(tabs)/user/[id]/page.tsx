@@ -113,7 +113,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
   const boughtProducts = await getCachedBoughtProducts(id);
   const reviews = await getCachedReviews(id);
   return (
-    <div className="flex flex-col gap-7 p-5">
+    <div className="min-h-screen bg-neutral-900 text-white gap-7 p-5 flex flex-col">
       <div className="flex gap-5 items-center">
         {user.avatar ? (
           <Image

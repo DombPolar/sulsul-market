@@ -37,7 +37,8 @@ const AddPost = () => {
   });
 
   return (
-    <div>
+    <div className="min-h-screen bg-neutral-900 text-white p-5 flex flex-col">
+            <h1 className="text-4xl mb-3">공지사항 작성🖊️</h1>
       <form onSubmit={onSubmit} className="p-5 flex flex-col gap-3">
         <Input
           required

@@ -87,9 +87,9 @@ const AddOrder = () => {
   });
 
   return (
-    <div>
+    <div className="min-h-screen bg-neutral-900 text-white flex flex-col">
       <form onSubmit={onSubmit} className="p-5 flex flex-col gap-3">
-        <h2 className="text-2xl mb-4">주문 추가</h2>
+      <h1 className="text-4xl mb-3">발주서 작성🖊️</h1>
 
         {fields.map((item, index) => (
           <div key={item.id} className="flex gap-3 items-center">

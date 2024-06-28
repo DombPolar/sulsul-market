@@ -10,7 +10,7 @@ import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 const CreateAccount = () => {
   const [state, dispatch] = useFormState(createAccount, null);
   return (
-    <div className="flex flex-col gap-10 py-8 px-6">
+    <div className="flex flex-col gap-10 py-8 px-6 min-h-screen bg-neutral-900 text-white">
       <div className="flex flex-col gap-2 *:font-medium">
         <h1 className="text-2xl">안녕하세요!</h1>
         <h2 className="text-xl">Fill in the form below to join!</h2>

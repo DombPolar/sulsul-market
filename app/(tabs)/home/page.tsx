@@ -34,8 +34,8 @@ export const metadata = {
 const ProductsPage = async () => {
   const initialProducts = await getInitialProducts();
   return (
-    <>
-      <h1 className="text-4xl mb-3">반품 & 건의</h1>
+    <div className="min-h-screen bg-neutral-900 text-white p-5">
+      <h1 className="text-4xl mb-3">반품 & 건의🖨️</h1>
       <div>
         <ProductList initialProduct={initialProducts} />
       </div>
@@ -45,7 +45,7 @@ const ProductsPage = async () => {
       >
         <PlusIcon className="size-10" />
       </Link>
-    </>
+    </div>
   );
 };
 

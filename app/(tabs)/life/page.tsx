@@ -36,8 +36,8 @@ export const metadata = {
 const LifePage = async () => {
   const posts = await getCachedPosts();
   return (
-    <div className="p-5 flex flex-col">
-      <h1 className="text-4xl mb-3">공지사항</h1>
+    <div className="min-h-screen bg-neutral-900 text-white p-5 flex flex-col">
+      <h1 className="text-4xl mb-3">공지사항📢</h1>
       {posts.map((post) => (
         <Link
           className="pb-5 mb-5 border-b border-neutral-400 text-neutral-400 flex flex-col last:pb-0 last:border-b-0"
@@ -53,11 +53,11 @@ const LifePage = async () => {
               <span>조회 {post.views}</span>
             </div>
             <div className="flex gap-4 items-center *:flex *:gap-1 *:items-center">
-              <span>
+              <span className="flex gap-1 items-center">
                 <HandThumbUpIcon className="size-4" />
                 {post._count.likes}
               </span>
-              <span>
+              <span className="flex gap-1 items-center">
                 <ChatBubbleBottomCenterIcon className="size-4" />
                 {post._count.comments}
               </span>

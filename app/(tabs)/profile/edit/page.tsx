@@ -50,7 +50,7 @@ const ProfileEdit = async () => {
     redirect(`/user/${user?.id}`);
   };
   return (
-    <div className="flex flex-col gap-5">
+    <div className="min-h-screen bg-neutral-900 text-white gap-7 p-5 flex flex-col">
       <h1 className="text-4xl">프로필 수정</h1>
       <form action={editProfile} className="flex flex-col gap-3">
         <label htmlFor="username">이름</label>

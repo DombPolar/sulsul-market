@@ -56,8 +56,8 @@ const ChatPage = async () => {
   const chats = await getCachedChats(session.id!);
 
   return (
-    <div>
-      <h1 className="text-4xl mb-3">채팅방</h1>
+    <div className="min-h-screen bg-neutral-900 text-white p-5">
+      <h1 className="text-4xl mb-3">채팅방💬</h1>
       {chats.map((chat, idx) => (
         <ListChat
           id={chat.id}

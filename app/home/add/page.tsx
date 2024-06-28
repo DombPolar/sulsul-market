@@ -83,7 +83,7 @@ const AddProduct = () => {
     await onSubmit();
   };
   return (
-    <div>
+    <div className="min-h-screen bg-neutral-900 text-white flex flex-col">
       <form action={onValid} className="p-5 flex flex-col gap-3">
         <label
           htmlFor="photo"

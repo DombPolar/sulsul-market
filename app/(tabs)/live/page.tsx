@@ -1,5 +1,3 @@
-// live/page.tsx
-
 import db from "@/lib/db";
 import { formatToTimeAgo } from "@/lib/utils";
 import { PlusIcon } from "@heroicons/react/24/solid";
@@ -25,8 +23,8 @@ const getCachedOrders = nextCache(getOrders, ["orders"], { tags: ["orders"] });
 const LivePage = async () => {
   const orders = await getCachedOrders();
   return (
-    <div className="p-5 flex flex-col">
-      <h1 className="text-4xl mb-3">발주</h1>
+    <div className="flex flex-col gap-5 p-5 bg-neutral-900 text-white">
+      <h1 className="text-4xl mb-3">발주📋</h1>
       {orders.map((order) => (
         <Link
           className="pb-5 mb-5 border-b border-neutral-400 text-neutral-400 flex flex-col last:pb-0 last:border-b-0"
