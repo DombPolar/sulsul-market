@@ -23,7 +23,7 @@ const getCachedOrders = nextCache(getOrders, ["orders"], { tags: ["orders"] });
 const LivePage = async () => {
   const orders = await getCachedOrders();
   return (
-    <div className="flex flex-col gap-5 p-5 bg-neutral-900 text-white">
+    <div className="min-h-screen flex flex-col gap-5 p-5 bg-neutral-900 text-white">
       <h1 className="text-4xl mb-3">발주📋</h1>
       {orders.map((order) => (
         <Link

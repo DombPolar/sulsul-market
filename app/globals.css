@@ -20,6 +20,13 @@
     @apply text-4xl font-bold; /* 기존 Tailwind 스타일을 유지 */
   }
 
+
+  h2 {
+    font-family: 'TheJamsil5Bold', sans-serif; /* h1 태그에 폰트 적용 */
+    font-weight: 700; /* 폰트 굵기 설정, @font-face 규칙에 설정한 font-weight와 일치 */
+    @apply text-2xl font-bold; /* 기존 Tailwind 스타일을 유지 */
+  }
+
   span {
     font-family: 'TheJamsil5Bold', sans-serif; /* h1 태그에 폰트 적용 */
     font-weight: 700; /* 폰트 굵기 설정, @font-face 규칙에 설정한 font-weight와 일치 */
